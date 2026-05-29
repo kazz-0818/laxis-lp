@@ -64,9 +64,17 @@ export function DashboardMock() {
     <div className="perspective-1200 w-full max-w-5xl mx-auto">
       <div
         ref={wrapRef}
-        className="preserve-3d rounded-2xl overflow-hidden border border-slate-200/90 shadow-[0_32px_64px_-16px_rgba(15,39,68,0.12)] bg-white will-change-transform"
+        className="preserve-3d rounded-xl overflow-hidden border border-slate-200/90 shadow-[0_40px_80px_-20px_rgba(15,39,68,0.15)] bg-slate-100 will-change-transform"
       >
-        <div className="flex min-h-[500px] sm:min-h-[560px]">
+        <div className="flex items-center gap-2 px-4 py-3 bg-slate-200/80 border-b border-slate-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+          <span className="ml-3 flex-1 text-[10px] text-slate-500 bg-white/80 rounded-md px-3 py-1 text-center">
+            app.laxis-hub.example/dashboard
+          </span>
+        </div>
+        <div className="flex min-h-[500px] sm:min-h-[560px] bg-white">
           <aside className="hidden md:flex flex-col w-52 border-r border-slate-100 bg-slate-50/80 p-4">
             <p className="text-xs font-bold text-cyan-600 mb-1">Laxis Hub</p>
             <p className="text-[10px] text-slate-400 mb-6">管理画面</p>

@@ -12,13 +12,13 @@ export const SECTION_IDS = {
   flow: 'flow',
   pricing: 'pricing',
   faq: 'faq',
-  contact: 'contact',
+  contact: 'start',
 } as const
 
 export const CTA = {
-  consult: '#contact',
+  consult: '#start',
   mailto: 'mailto:info@example.com?subject=LAXIS%20無料相談',
-  materials: '#contact',
+  materials: '#start',
 } as const
 
 export const STORY_PHASES = [
