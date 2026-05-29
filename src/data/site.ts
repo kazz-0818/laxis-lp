@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'LAXIS',
-  tagline: 'System Design / Web / AI / LINE / Automation',
+  tagline: 'System Design / Web / LINE / AI / Automation',
 } as const
 
 export const CONTACT = {

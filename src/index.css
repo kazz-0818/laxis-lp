@@ -5,9 +5,10 @@
   --font-sans: 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Noto Serif JP', ui-serif, Georgia, serif;
   --color-ink: #0a1628;
-  --color-ink-muted: #475569;
+  --color-ink-muted: #64748b;
   --color-accent: #0891b2;
   --color-mint: #14b8a6;
+  --color-violet: #8b5cf6;
 }
 
 @layer base {
@@ -33,24 +34,36 @@
     @apply font-serif font-semibold tracking-tight text-ink;
   }
 
+  .scene-aurora {
+    background:
+      radial-gradient(ellipse 90% 60% at 15% 10%, rgba(167, 139, 250, 0.14), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 85% 15%, rgba(34, 211, 238, 0.16), transparent 50%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(241, 245, 249, 0.9), transparent),
+      linear-gradient(168deg, #ffffff 0%, #f6f8fc 42%, #eef4fc 100%);
+  }
+
   .scene-gradient {
-    background: linear-gradient(165deg, #ffffff 0%, #f1f5f9 45%, #e8f4fc 100%);
+    background: linear-gradient(168deg, #ffffff 0%, #f4f6fb 48%, #eef2ff 100%);
   }
 
   .scene-gradient-soft {
-    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f1f5f9 100%);
+    background: linear-gradient(180deg, #fafbfd 0%, #f0f4ff 55%, #f8fafc 100%);
   }
 
   .grid-bg {
     background-image:
-      linear-gradient(rgba(10, 22, 40, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(10, 22, 40, 0.04) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 20%, transparent 75%);
+      linear-gradient(rgba(10, 22, 40, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10, 22, 40, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, black 15%, transparent 72%);
   }
 
   .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_40px_-12px_rgba(10,22,40,0.1)];
+    @apply bg-white/65 backdrop-blur-xl border border-white/90;
+  }
+
+  .glass-glow {
+    @apply bg-white/72 backdrop-blur-xl border border-white/95 shadow-[0_12px_40px_-14px_rgba(10,22,40,0.12),0_0_0_1px_rgba(255,255,255,0.6)_inset];
   }
 
   .section-pad {
@@ -63,6 +76,12 @@
 
   .container-wide {
     @apply mx-auto max-w-6xl w-full;
+  }
+
+  .scene-message {
+    @apply font-serif font-semibold tracking-tight text-ink text-center;
+    font-size: clamp(2rem, 6vw, 3.75rem);
+    line-height: 1.12;
   }
 
   .scrollbar-hide {

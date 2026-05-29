@@ -3,21 +3,9 @@ import { useRef, useState } from 'react'
 import { SECTION_IDS } from '../data/site'
 
 const blocks = [
-  {
-    key: 'A',
-    title: '集客導線',
-    desc: 'LP、SNS、広告、QR、紹介から問い合わせへつなぐ。',
-  },
-  {
-    key: 'B',
-    title: '受注導線',
-    desc: 'フォーム、LINE、見積もり、予約、申込をスムーズにする。',
-  },
-  {
-    key: 'C',
-    title: '管理導線',
-    desc: '顧客情報、対応状況、売上、通知、スタッフ共有を見える化する。',
-  },
+  { key: 'A', title: '集客導線' },
+  { key: 'B', title: '受注導線' },
+  { key: 'C', title: '管理導線' },
 ]
 
 export function ExperienceSection() {
@@ -36,48 +24,46 @@ export function ExperienceSection() {
   })
 
   return (
-    <div ref={containerRef} id={SECTION_IDS.experience} className="relative" style={{ height: '300vh' }}>
+    <div ref={containerRef} id={SECTION_IDS.experience} className="relative" style={{ height: '280vh' }}>
       <div className="sticky top-0 h-[100svh] scene-gradient overflow-hidden">
         <div className="absolute inset-0 grid-bg" />
         <div className="absolute top-6 right-5 sm:right-10 z-20">
-          <span className="text-[10px] tracking-[0.35em] uppercase px-4 py-2 rounded-full border border-ink/10 bg-white/60 text-ink-muted">
-            FLOW
+          <span className="text-[10px] tracking-[0.35em] uppercase px-4 py-2 rounded-full border border-ink/10 bg-white/60 text-ink-muted backdrop-blur-sm">
+            04 · FLOW
           </span>
         </div>
 
-        <div className="relative z-10 h-full section-pad flex flex-col justify-center py-20 max-w-4xl mx-auto">
-          <p className="text-xs tracking-[0.4em] text-accent mb-6">WHAT WE BUILD</p>
-          <h2 className="text-display text-3xl sm:text-5xl mb-16">
+        <div className="relative z-10 h-full section-pad flex flex-col justify-center max-w-4xl mx-auto">
+          <h2 className="scene-message mb-20 sm:mb-28">
             作るのは、
             <br />
-            ページではなく“流れ”です。
+            ページではなく
+            <br />
+            “流れ”です。
           </h2>
 
-          <div className="relative min-h-[200px]">
+          <div className="relative h-24 sm:h-32 flex items-center justify-center">
             {blocks.map((b, i) => (
-              <motion.div
+              <motion.p
                 key={b.key}
-                className="absolute inset-0 flex flex-col justify-center"
-                initial={false}
+                className="absolute text-display text-4xl sm:text-6xl lg:text-7xl text-accent/90"
                 animate={{
                   opacity: active === i ? 1 : 0,
-                  y: active === i ? 0 : active > i ? -40 : 40,
-                  pointerEvents: active === i ? 'auto' : 'none',
+                  scale: active === i ? 1 : 0.92,
+                  y: active === i ? 0 : active > i ? -24 : 24,
                 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
-                <span className="text-[10px] tracking-[0.5em] text-ink-muted mb-4">{b.key}</span>
-                <h3 className="text-display text-4xl sm:text-6xl">{b.title}</h3>
-                <p className="mt-6 text-lg text-ink-muted font-light max-w-lg">{b.desc}</p>
-              </motion.div>
+                {b.title}
+              </motion.p>
             ))}
           </div>
 
-          <div className="flex gap-2 mt-12">
+          <div className="flex gap-2 mt-16 max-w-xs mx-auto w-full">
             {blocks.map((_, i) => (
               <div
                 key={i}
-                className={`h-1 flex-1 rounded-full transition-colors duration-500 ${
+                className={`h-0.5 flex-1 rounded-full transition-colors duration-500 ${
                   active === i ? 'bg-accent' : 'bg-ink/10'
                 }`}
               />
