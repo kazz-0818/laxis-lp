@@ -1,67 +1,88 @@
-# LAXIS（ラクシス）— 体験型3DスクロールLP
+# LAXIS 公式LP
 
-業務の「混乱 → 整理 → 仕組み化 → Hub一元化」を、スクロール体験として伝えるLPです。
+事業に合わせたシステム導入支援サービス「LAXIS」の体験型ランディングページです。スクロールでシーンが切り替わる、白基調のプレミアムな1ページ構成です。
 
-**本番:** https://laxis-lp.vercel.app
+## 使用技術
 
-## 技術スタック
-
-- React 19 + Vite 8 + TypeScript
+- React 19
+- TypeScript
+- Vite 6
 - Tailwind CSS v4
-- **Lenis**（スムーススクロール）
-- **GSAP + ScrollTrigger**（ピン留め・スクロールストーリー）
-- React Three Fiber（Hero / Laxis Hub の2箇所）
-- lucide-react
+- Framer Motion
+- React Icons
 
-## 体験設計（8章）
-
-| 章 | セクション | 演出 |
-|----|-----------|------|
-| 01 Chaos | Hero | 全画面3D・ピン留め・ChaosMesh背景 |
-| 02 Pain | 課題 | 散らばったカード→フォーカス整列（ピン） |
-| 03 Wrong | 失敗 | ツール群クラスター分解 |
-| 04 Reframe | 解決思想 | ノードグラフ＋ステップ点灯（ピン） |
-| 05 Systemize | サービス | 積層カード |
-| 06 Hub | Laxis Hub | 3D Hub＋軌道カード＋接続線 |
-| 07 Result | 導入例・Dashboard | Before/After・3Dモック迫近 |
-| 08 Action | CTA | 光が集まるフィナーレ |
-
-## 開発
+## ローカル起動
 
 ```bash
 npm install
 npm run dev
 ```
 
-## 構成
+ブラウザで `http://localhost:5173` を開いてください。
 
-```
-src/
-├── providers/SmoothScrollProvider.tsx  # Lenis + GSAP
-├── components/
-│   ├── layout/
-│   ├── sections/
-│   ├── scenes/      # ChaosMesh, PhilosophyNodes
-│   ├── 3d/          # HeroScene, HubScene
-│   └── ui/          # ChapterShell, StoryRail, DashboardMock
+## ビルド
+
+```bash
+npm run build
+npm run preview
 ```
 
-## パフォーマンス
+## Vercelデプロイ
 
-- PC: Lenis + GSAPピン + R3F
-- スマホ: 軽量表示（3D無効・ピン簡略化）
-- `prefers-reduced-motion`: 演出抑制
+1. GitHubにリポジトリをpush
+2. [Vercel](https://vercel.com) でプロジェクトをインポート
+3. Framework Preset: **Vite**
+4. Build Command: `npm run build`
+5. Output Directory: `dist`
 
-## CTA差し替え
+CLIの場合:
 
-`src/lib/constants.ts`
+```bash
+npx vercel --prod
+```
 
-## Vercel
+## セクション構成
 
-| 項目 | 値 |
-|------|-----|
-| Framework | Vite |
-| Build | `npm run build` |
-| Output | `dist` |
+| # | コンポーネント | 内容 |
+|---|----------------|------|
+| 1 | Hero | ファーストビュー・3D風ビジュアル |
+| 2 | SceneIntro | ホームページだけでは足りない |
+| 3 | ProblemSection | 課題の浮遊カード |
+| 4 | SolutionSection | モジュール組み合わせ |
+| 5 | ExperienceSection | 集客・受注・管理の3導線（スクロール切替） |
+| 6 | UseCaseSection | ユースケース |
+| 7 | SystemMapSection | LAXISハブ図 |
+| 8 | ProcessSection | 導入プロセス |
+| 9 | WorksLikeSection | Before / After |
+| 10 | PricingHintSection | 料金の考え方 |
+| 11 | FAQSection | よくある質問 |
+| 12 | CTASection | 最終CTA |
+| — | Footer | フッター |
 
-株式会社NLG
+## 問い合わせリンクの差し替え
+
+`src/data/site.ts` の `CONTACT` を編集してください。
+
+```ts
+export const CONTACT = {
+  mailto: 'mailto:your@email.com?subject=...',
+  line: 'https://line.me/R/ti/p/@your-id',
+  phone: 'tel:0312345678',
+}
+```
+
+## 今後追加したい機能
+
+- 問い合わせフォーム実装
+- LINE公式アカウント連携
+- 導入事例ページ
+- 管理画面デモ
+- AIチャットデモ
+- 料金シミュレーター
+- CMS連携
+- アニメーションの高度化
+- 3Dビジュアルの実装（React Three Fiber 等）
+
+## ライセンス
+
+Private — LAXIS / NLG

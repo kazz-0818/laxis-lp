@@ -1,42 +1,39 @@
-import { SmoothScrollProvider } from './providers/SmoothScrollProvider'
-import { Header } from './components/layout/Header'
-import { Footer } from './components/layout/Footer'
-import { ScrollLine } from './components/ui/ScrollLine'
-import { ChapterRail } from './components/ui/ChapterRail'
-import { Hero } from './components/sections/Hero'
-import { ChaosSection } from './components/sections/ChaosSection'
-import { PainSection } from './components/sections/PainSection'
-import { WrongSection } from './components/sections/WrongSection'
-import { RebuildSection } from './components/sections/RebuildSection'
-import { SystemizeSection } from './components/sections/SystemizeSection'
-import { LaxisHubSection } from './components/sections/LaxisHubSection'
-import { DashboardSection } from './components/sections/DashboardSection'
-import { PricingSection } from './components/sections/PricingSection'
-import { FAQSection } from './components/sections/FAQSection'
-import { CTASection } from './components/sections/CTASection'
+import { Header } from './components/Header'
+import { Footer } from './components/Footer'
+import { ScrollProgress } from './components/ScrollProgress'
+import { Hero } from './components/Hero'
+import { SceneIntro } from './components/SceneIntro'
+import { ProblemSection } from './components/ProblemSection'
+import { SolutionSection } from './components/SolutionSection'
+import { ExperienceSection } from './components/ExperienceSection'
+import { UseCaseSection } from './components/UseCaseSection'
+import { SystemMapSection } from './components/SystemMapSection'
+import { ProcessSection } from './components/ProcessSection'
+import { WorksLikeSection } from './components/WorksLikeSection'
+import { PricingHintSection } from './components/PricingHintSection'
+import { FAQSection } from './components/FAQSection'
+import { CTASection } from './components/CTASection'
 
-function App() {
+export default function App() {
   return (
-    <SmoothScrollProvider>
-      <ScrollLine />
-      <ChapterRail />
+    <>
+      <ScrollProgress />
       <Header />
       <main>
         <Hero />
-        <ChaosSection />
-        <PainSection />
-        <WrongSection />
-        <RebuildSection />
-        <SystemizeSection />
-        <LaxisHubSection />
-        <DashboardSection />
-        <PricingSection />
+        <SceneIntro />
+        <ProblemSection />
+        <SolutionSection />
+        <ExperienceSection />
+        <UseCaseSection />
+        <SystemMapSection />
+        <ProcessSection />
+        <WorksLikeSection />
+        <PricingHintSection />
         <FAQSection />
         <CTASection />
       </main>
       <Footer />
-    </SmoothScrollProvider>
+    </>
   )
 }
-
-export default App
