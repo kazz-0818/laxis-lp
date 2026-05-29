@@ -1,5 +1,7 @@
+import { SmoothScrollProvider } from './providers/SmoothScrollProvider'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
+import { StoryRail } from './components/ui/StoryRail'
 import { Hero } from './components/sections/Hero'
 import { ProblemSection } from './components/sections/ProblemSection'
 import { FailureSection } from './components/sections/FailureSection'
@@ -17,8 +19,9 @@ import { CTASection } from './components/sections/CTASection'
 
 function App() {
   return (
-    <>
+    <SmoothScrollProvider>
       <Header />
+      <StoryRail />
       <main>
         <Hero />
         <ProblemSection />
@@ -36,7 +39,7 @@ function App() {
         <CTASection />
       </main>
       <Footer />
-    </>
+    </SmoothScrollProvider>
   )
 }
 
