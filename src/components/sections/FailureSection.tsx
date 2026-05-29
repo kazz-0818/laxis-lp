@@ -1,99 +1,83 @@
 import { useEffect, useRef } from 'react'
-import { XCircle, MessageSquareWarning } from 'lucide-react'
 import { gsap, registerGsap } from '../../lib/gsap'
-import { ChapterShell } from '../ui/ChapterShell'
+import { CinematicScene } from '../ui/CinematicScene'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
 import { SECTION_IDS } from '../../lib/constants'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
-import { useIsMobile } from '../../hooks/useIsMobile'
 
-const chaosItems = ['SaaS', 'Excel', 'LINE', '紙', 'Chat', 'PDF', '要件定義', '外注']
+const tools = ['SaaS', 'Excel', 'LINE', '紙', 'Chat', 'PDF', '外注', '要件']
 
 export function FailureSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
   const clusterRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
-  const mobile = useIsMobile()
 
   useEffect(() => {
-    if (reduced || mobile || !sectionRef.current || !clusterRef.current) return
-
+    if (reduced || !clusterRef.current) return
     registerGsap()
-    const items = clusterRef.current.querySelectorAll('[data-chaos]')
-
+    const items = clusterRef.current.querySelectorAll('[data-tool]')
     const ctx = gsap.context(() => {
       gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
-          end: 'bottom 30%',
-          scrub: 1.2,
-        },
+        scrollTrigger: { trigger: clusterRef.current, start: 'top 75%', end: 'bottom 25%', scrub: 1 },
+      }).to(items, {
+        rotation: (i) => (i % 2 ? 18 : -18),
+        x: (i) => (i - 3.5) * 45,
+        y: (i) => Math.sin(i) * 30,
+        opacity: 0.5,
+        scale: 0.8,
+        stagger: 0.03,
       })
-        .to(items, {
-          rotation: (i) => (i % 2 === 0 ? 25 : -25),
-          x: (i) => (i - 3.5) * 45,
-          y: (i) => Math.sin(i * 1.2) * 30,
-          scale: 0.7,
-          opacity: 0.35,
-          stagger: 0.04,
-          ease: 'power2.inOut',
-        })
-        .to(clusterRef.current, { scale: 0.9, filter: 'blur(2px)' }, 0)
-    }, sectionRef)
-
+    })
     return () => ctx.revert()
-  }, [reduced, mobile])
+  }, [reduced])
 
   return (
-    <ChapterShell id={SECTION_IDS.failure} chapter="Wrong Approach" chapterNum="03" theme="light" minHeight="min-h-screen">
-      <div ref={sectionRef} className="section-pad relative z-10 pt-16">
-        <div className="container-narrow">
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-navy-900 leading-tight max-w-3xl">
-            「とりあえずシステム化」は、
-            <span className="text-red-500"> 失敗の元。</span>
-          </h2>
-          <p className="mt-4 text-slate-600 max-w-2xl">
-            業務が整理されていないまま導入すると、混乱だけが拡大します。
+    <CinematicScene
+      id={SECTION_IDS.failure}
+      theme="muted"
+      tag="WRONG · 02"
+      minHeight="min-h-[100svh]"
+      background={<AtmosphereBackground variant="muted" />}
+      align="center"
+    >
+      <div className="text-center mb-16">
+        <h2 className="text-editorial text-3xl sm:text-5xl lg:text-6xl leading-[1.15]">
+          「とりあえず
+          <br />
+          システム化」は、
+          <br />
+          <span className="text-red-600/85">失敗の元。</span>
+        </h2>
+      </div>
+
+      <div ref={clusterRef} className="relative h-48 sm:h-56 mb-16">
+        {tools.map((t, i) => (
+          <span
+            key={t}
+            data-tool
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-2 text-xs sm:text-sm font-medium text-navy-800/80 border border-slate-300/80 bg-white/90 backdrop-blur-sm rounded-full shadow-sm will-change-transform"
+            style={{
+              transform: `translate(calc(-50% + ${(i - 3.5) * 28}px), calc(-50% + ${Math.sin(i) * 16}px)) rotate(${(i - 4) * 8}deg)`,
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="glass-panel text-left">
+          <p className="text-editorial text-lg mb-2">既存ツールが合わない</p>
+          <p className="text-sm text-navy-800/60 leading-relaxed font-light">
+            汎用SaaSは高額で複雑。現場の運用と噛み合わない。
           </p>
-
-          <div className="grid lg:grid-cols-3 gap-8 mt-14 items-center">
-            <div className="glass-light rounded-2xl p-6 border border-slate-200/80 shadow-xl">
-              <XCircle className="text-red-400 mb-3" size={28} />
-              <h3 className="font-bold text-navy-900 text-lg">既存ツールが合わない</h3>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                汎用SaaSは高額で複雑。現場の運用と噛み合わない。
-              </p>
-            </div>
-
-            <div
-              ref={clusterRef}
-              className="relative h-80 flex items-center justify-center preserve-3d"
-            >
-              {chaosItems.map((label, i) => (
-                <div
-                  key={label}
-                  data-chaos
-                  className="absolute px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-navy-800 bg-white border border-slate-200 shadow-lg will-change-transform"
-                  style={{
-                    transform: `rotate(${(i - 4) * 10}deg) translate(${(i - 3.5) * 22}px, ${Math.sin(i) * 18}px)`,
-                    zIndex: i,
-                  }}
-                >
-                  {label}
-                </div>
-              ))}
-            </div>
-
-            <div className="glass-light rounded-2xl p-6 border border-slate-200/80 shadow-xl">
-              <MessageSquareWarning className="text-amber-500 mb-3" size={28} />
-              <h3 className="font-bold text-navy-900 text-lg">外注先に伝えづらい</h3>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-                属人化した業務が共有できず、現場とズレた成果物になる。
-              </p>
-            </div>
-          </div>
+        </div>
+        <div className="glass-panel text-left">
+          <p className="text-editorial text-lg mb-2">外注先に伝えづらい</p>
+          <p className="text-sm text-navy-800/60 leading-relaxed font-light">
+            属人化した業務が共有できず、ズレたものができる。
+          </p>
         </div>
       </div>
-    </ChapterShell>
+    </CinematicScene>
   )
 }

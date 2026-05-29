@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { Check, Star } from 'lucide-react'
 import { gsap, registerGsap } from '../../lib/gsap'
-import { SectionTitle } from '../ui/SectionTitle'
 import { GlowButton } from '../ui/GlowButton'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
 import { CTA, SECTION_IDS } from '../../lib/constants'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { cn } from '../../lib/utils'
@@ -54,14 +54,15 @@ export function PricingSection() {
     if (reduced || !sectionRef.current) return
     registerGsap()
     const cards = sectionRef.current.querySelectorAll('[data-price-card]')
+    if (!cards.length) return
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cards,
-        { y: 60, opacity: 0 },
+        { y: 48, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.1,
+          stagger: 0.08,
           ease: 'power3.out',
           scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' },
         },
@@ -74,59 +75,80 @@ export function PricingSection() {
     <section
       ref={sectionRef}
       id={SECTION_IDS.pricing}
-      className="section-pad relative bg-navy-950 text-white overflow-hidden"
+      className="relative min-h-[100svh] scene-white overflow-hidden"
     >
-      <div className="absolute inset-0 grid-floor opacity-40" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-cyan-500/8 blur-[100px]" />
+      <AtmosphereBackground variant="mist" />
+      <div className="absolute inset-0 vignette-light pointer-events-none z-[1]" />
+      <div className="absolute top-6 right-5 sm:right-10 z-30">
+        <span className="pill-tag">PRICING</span>
+      </div>
 
-      <div className="container-wide relative z-10">
-        <SectionTitle
-          light
-          label="Pricing"
-          title="スモールスタートから、本格的な独自システムまで。"
-        />
+      <div className="relative z-10 section-pad py-24 sm:py-32">
+        <div className="container-editorial max-w-6xl mx-auto">
+          <h2 className="text-editorial text-3xl sm:text-4xl text-center mb-4">
+            スモールスタートから、
+            <br className="hidden sm:block" />
+            本格的な独自システムまで。
+          </h2>
+          <p className="text-center text-sm text-navy-800/55 font-light mb-14 max-w-md mx-auto">
+            規模に合わせて選べる4つのプラン。
+          </p>
 
-        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              data-price-card
-              className={cn(
-                'relative rounded-2xl p-6 sm:p-7 border transition-all duration-500 hover:-translate-y-2',
-                plan.featured
-                  ? 'bg-linear-to-b from-navy-800 to-navy-900 border-mint-400/50 shadow-2xl shadow-cyan-500/25 scale-[1.02] z-10'
-                  : 'bg-navy-900/60 border-white/10 hover:border-cyan-400/30',
-              )}
-            >
-              {plan.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full bg-linear-to-r from-mint-500 to-cyan-500 text-navy-950 text-xs font-bold">
-                  <Star size={12} fill="currentColor" />
-                  おすすめ
-                </div>
-              )}
-              <p className="text-xs text-cyan-400 font-semibold">{plan.sub}</p>
-              <h3 className="text-xl font-extrabold mt-1">{plan.name}</h3>
-              <p className="text-sm text-slate-400 mt-1">{plan.desc}</p>
-              <p className="text-[10px] text-slate-500 mt-4">{plan.note}</p>
-              <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1">{plan.price}</p>
-              <ul className="mt-6 space-y-2 mb-8">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex gap-2 text-sm text-slate-300">
-                    <Check size={16} className="text-mint-400 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <GlowButton
-                href={CTA.consult}
-                variant={plan.featured ? 'primary' : 'outline'}
-                size="sm"
-                className="w-full"
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                data-price-card
+                className={cn(
+                  'relative rounded-xl p-6 sm:p-7 border transition-all duration-500 bg-white',
+                  plan.featured
+                    ? 'border-cyan-400/60 shadow-[0_16px_48px_-12px_rgba(6,182,212,0.2)] ring-1 ring-cyan-400/20'
+                    : 'border-slate-200/90 shadow-[0_8px_24px_-8px_rgba(15,39,68,0.06)] hover:border-slate-300',
+                )}
               >
-                相談する
-              </GlowButton>
-            </div>
-          ))}
+                {plan.featured && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full bg-linear-to-r from-cyan-500 to-mint-400 text-white text-[10px] font-bold tracking-widest uppercase">
+                    <Star size={10} fill="currentColor" />
+                    おすすめ
+                  </div>
+                )}
+                <p className="text-[10px] tracking-widest uppercase text-slate-400">{plan.sub}</p>
+                <h3 className="text-editorial text-xl mt-2">{plan.name}</h3>
+                <p className="text-sm text-navy-800/55 font-light mt-1">{plan.desc}</p>
+                <p className="text-[10px] text-slate-400 mt-5 tracking-widest uppercase">{plan.note}</p>
+                <p
+                  className={cn(
+                    'text-2xl font-serif mt-1',
+                    plan.featured ? 'text-cyan-700' : 'text-navy-900',
+                  )}
+                >
+                  {plan.price}
+                </p>
+                <ul className="mt-6 space-y-2 mb-8">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex gap-2 text-sm text-navy-800/70 font-light">
+                      <Check
+                        size={14}
+                        className={cn(
+                          'shrink-0 mt-0.5',
+                          plan.featured ? 'text-cyan-600' : 'text-mint-500',
+                        )}
+                      />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <GlowButton
+                  href={CTA.consult}
+                  variant={plan.featured ? 'primary' : 'outline'}
+                  size="sm"
+                  className="w-full"
+                >
+                  相談する
+                </GlowButton>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -1,165 +1,118 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import {
-  LayoutDashboard,
-  Users,
-  Receipt,
-  MessageCircle,
-  TrendingUp,
-  Calendar,
-  Package,
-  Sparkles,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { gsap, registerGsap } from '../../lib/gsap'
-import { ChapterShell } from '../ui/ChapterShell'
-import { GridBackground } from '../ui/GridBackground'
-import { NoiseBackground } from '../ui/NoiseBackground'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
 import { SECTION_IDS } from '../../lib/constants'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useIsMobile } from '../../hooks/useIsMobile'
 
 const HubScene = lazy(() => import('../3d/HubScene').then((m) => ({ default: m.HubScene })))
 
-const features: { icon: LucideIcon; title: string; desc: string; angle: number }[] = [
-  { icon: LayoutDashboard, title: '専用管理画面', desc: 'ダッシュボードとKPI', angle: 0 },
-  { icon: Users, title: '顧客管理', desc: '契約・対応履歴', angle: 45 },
-  { icon: Receipt, title: '売上・請求', desc: 'PDF・入金確認', angle: 90 },
-  { icon: MessageCircle, title: 'LINE連携', desc: '予約・リマインド', angle: 135 },
-  { icon: TrendingUp, title: '営業管理', desc: '商談・成績', angle: 180 },
-  { icon: Calendar, title: '予約・受付', desc: '空き枠・QR', angle: 225 },
-  { icon: Package, title: '在庫・商品', desc: 'SKU・販売状況', angle: 270 },
-  { icon: Sparkles, title: 'AI活用', desc: '返信・議事録', angle: 315 },
+const features = [
+  '専用管理画面',
+  '顧客管理',
+  '売上・請求',
+  'LINE連携',
+  '営業管理',
+  '予約・受付',
+  '在庫・商品',
+  'AI活用',
 ]
 
 export function LaxisHubSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const orbitRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const [gather, setGather] = useState(0)
-  const [hovered, setHovered] = useState<number | null>(null)
   const reduced = useReducedMotion()
   const mobile = useIsMobile()
 
   useEffect(() => {
-    if (reduced || mobile || !sectionRef.current || !orbitRef.current) return
+    if (reduced || mobile || !sectionRef.current || !pinRef.current) return
 
     registerGsap()
-    const cards = orbitRef.current.querySelectorAll('[data-orbit-card]')
-
     const ctx = gsap.context(() => {
       gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 40%',
-          end: 'center center',
+          start: 'top top',
+          end: '+=120%',
           scrub: 1,
+          pin: pinRef.current,
           onUpdate: (self) => setGather(self.progress),
         },
-      }).fromTo(
-        cards,
-        { opacity: 0, scale: 0.6 },
-        { opacity: 1, scale: 1, stagger: 0.05, ease: 'power3.out' },
-      )
+      })
+        .fromTo(titleRef.current, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3 }, 0)
+        .fromTo(
+          listRef.current?.children ?? [],
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, stagger: 0.04, duration: 0.25 },
+          0.2,
+        )
     }, sectionRef)
 
     return () => ctx.revert()
   }, [reduced, mobile])
 
-  const radius = mobile ? 0 : 200 + gather * -80
+  const inner = (
+    <>
+      <div className="absolute inset-0 flex items-center justify-center pt-8">
+        <Suspense fallback={null}>
+          <HubScene className="absolute inset-0 w-full h-full max-w-4xl mx-auto" gatherProgress={gather} />
+        </Suspense>
+      </div>
 
-  return (
-    <ChapterShell id={SECTION_IDS.hub} chapter="Hub" chapterNum="06" theme="dark" minHeight="min-h-screen">
-      <GridBackground />
-      <NoiseBackground />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
-
-      <div ref={sectionRef} className="section-pad relative z-10 pt-16">
-        <div className="container-wide">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white text-center max-w-4xl mx-auto leading-tight">
-            バラバラな業務を整理し、
+      <div className="relative z-20 h-full flex flex-col justify-between section-pad py-20 sm:py-24">
+        <div ref={titleRef} className="text-center pt-12 sm:pt-16">
+          <p className="text-xs tracking-[0.45em] text-cyan-700 mb-4">Laxis Hub</p>
+          <h2 className="text-editorial text-3xl sm:text-5xl lg:text-6xl leading-[1.1]">
+            バラバラな業務を、
             <br />
-            <span className="text-shine">会社に合った仕組み</span>へ。
+            <span className="text-shine">ひとつに。</span>
           </h2>
-          <p className="text-center text-slate-400 mt-4 max-w-2xl mx-auto">
-            Laxis Hub — 顧客・売上・予約・営業・在庫・AIを、ひとつの中心につなぎます。
+          <p className="mt-4 text-sm text-navy-800/55 font-light max-w-md mx-auto">
+            LP内最大の見せ場 — すべての業務がここに集約されます
           </p>
+        </div>
 
-          <div className="relative mx-auto mt-12 max-w-4xl">
-            <div className="relative h-[380px] sm:h-[520px]">
-              {!mobile && (
-                <Suspense fallback={null}>
-                  <HubScene className="absolute inset-0" gatherProgress={gather} />
-                </Suspense>
-              )}
-
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center pointer-events-none">
-                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-linear-to-br from-navy-800 to-navy-900 border-2 border-mint-400/50 flex flex-col items-center justify-center shadow-[0_0_60px_rgba(45,212,191,0.35)]">
-                  <p className="text-[10px] text-mint-400 tracking-widest">CORE</p>
-                  <p className="text-xl sm:text-2xl font-extrabold text-white">Laxis</p>
-                  <p className="text-xl sm:text-2xl font-extrabold text-white -mt-1">Hub</p>
-                </div>
-              </div>
-
-              <div ref={orbitRef} className="absolute inset-0 hidden lg:block">
-                <svg className="absolute inset-0 w-full h-full opacity-30" aria-hidden>
-                  {features.map((f) => {
-                    const rad = (f.angle * Math.PI) / 180
-                    const cx = 50 + Math.cos(rad) * 38
-                    const cy = 50 + Math.sin(rad) * 38
-                    return (
-                      <line
-                        key={f.title}
-                        x1="50%"
-                        y1="50%"
-                        x2={`${cx}%`}
-                        y2={`${cy}%`}
-                        stroke="#2dd4bf"
-                        strokeWidth="1"
-                        strokeDasharray="4 6"
-                        opacity={0.4 + gather * 0.5}
-                      />
-                    )
-                  })}
-                </svg>
-
-                {features.map((f, i) => {
-                  const rad = ((f.angle - 90) * Math.PI) / 180
-                  const r = radius
-                  const x = Math.cos(rad) * r
-                  const y = Math.sin(rad) * r
-                  return (
-                    <div
-                      key={f.title}
-                      data-orbit-card
-                      className="absolute left-1/2 top-1/2 w-44 transition-all duration-500 will-change-transform"
-                      style={{
-                        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${hovered === i ? 1.08 : 1})`,
-                        zIndex: hovered === i ? 30 : 10,
-                      }}
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered(null)}
-                    >
-                      <div className="glass-neon rounded-xl p-4 border border-cyan-400/30 hover:border-mint-400/60 hover:shadow-lg hover:shadow-cyan-500/20">
-                        <f.icon className="text-mint-400 mb-2" size={18} />
-                        <h3 className="font-bold text-sm text-white">{f.title}</h3>
-                        <p className="text-[11px] text-slate-400 mt-0.5">{f.desc}</p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+        <div
+          ref={listRef}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 max-w-3xl mx-auto w-full pb-4"
+        >
+          {features.map((f) => (
+            <div
+              key={f}
+              className="bg-white/90 backdrop-blur-md border border-white/80 rounded-lg py-3 px-4 text-center text-[11px] sm:text-xs text-navy-900 font-medium shadow-[0_8px_24px_-8px_rgba(15,39,68,0.15)] hover:border-cyan-400/50 hover:text-cyan-700 transition-colors"
+            >
+              {f}
             </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:hidden mt-6">
-              {features.map((f) => (
-                <div key={f.title} className="glass-neon rounded-xl p-3">
-                  <f.icon className="text-mint-400 mb-1" size={16} />
-                  <h3 className="font-bold text-xs text-white">{f.title}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-    </ChapterShell>
+    </>
+  )
+
+  if (mobile) {
+    return (
+      <section id={SECTION_IDS.hub} className="relative min-h-[100svh] scene-hub overflow-hidden section-pad py-24">
+        <AtmosphereBackground variant="hub" />
+        <div className="absolute top-6 right-5 z-30">
+          <span className="pill-tag">HUB · 04</span>
+        </div>
+        <div className="relative z-10">{inner}</div>
+      </section>
+    )
+  }
+
+  return (
+    <section ref={sectionRef} id={SECTION_IDS.hub} className="relative h-[220vh]">
+      <div ref={pinRef} className="relative h-[100svh] overflow-hidden scene-hub">
+        <AtmosphereBackground variant="hub" />
+        <div className="absolute top-6 right-5 sm:right-10 z-30">
+          <span className="pill-tag">HUB · 04</span>
+        </div>
+        {inner}
+      </div>
+    </section>
   )
 }

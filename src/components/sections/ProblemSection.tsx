@@ -1,137 +1,151 @@
-import { useEffect, useRef } from 'react'
-import { UserX, LayoutGrid, Hand, AlertTriangle, HelpCircle } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap, registerGsap } from '../../lib/gsap'
-import { ChapterShell } from '../ui/ChapterShell'
-import { GridBackground } from '../ui/GridBackground'
-import { NoiseBackground } from '../ui/NoiseBackground'
-import { ChaosMesh } from '../scenes/ChaosMesh'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
+import { ProblemChaosLayer } from '../scenes/ProblemChaosLayer'
 import { SECTION_IDS } from '../../lib/constants'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useIsMobile } from '../../hooks/useIsMobile'
 
-const problems: {
-  icon: LucideIcon
-  title: string
-  desc: string
-  scatter: { x: number; y: number; r: number; z: number }
-}[] = [
-  { icon: UserX, title: '属人化', desc: '担当者しかわからない。引き継ぎに時間がかかる。', scatter: { x: -140, y: -100, r: -12, z: 1 } },
-  { icon: LayoutGrid, title: '管理がバラバラ', desc: '顧客・売上・予約・請求が別管理。', scatter: { x: 160, y: -80, r: 8, z: 2 } },
-  { icon: Hand, title: '手作業が多い', desc: '転記・集計・PDF・LINEが毎回手作業。', scatter: { x: -120, y: 120, r: 14, z: 3 } },
-  { icon: AlertTriangle, title: 'ミスや漏れ', desc: '入力漏れ・通知漏れ・請求漏れ。', scatter: { x: 150, y: 100, r: -10, z: 4 } },
-  { icon: HelpCircle, title: '何から始める？', desc: 'DXに興味はあるが、着手点が不明。', scatter: { x: 0, y: 160, r: 6, z: 5 } },
+const slides = [
+  {
+    num: '01',
+    title: '属人化',
+    body: '担当者しかわからない。引き継ぎと確認に、毎日時間が消えていく。',
+  },
+  {
+    num: '02',
+    title: 'バラバラな管理',
+    body: '顧客・売上・予約・請求。情報が散らばり、全体像が見えない。',
+  },
+  {
+    num: '03',
+    title: '手作業',
+    body: '転記、集計、PDF、LINE。人の手が、業務のボトルネックになる。',
+  },
+  {
+    num: '04',
+    title: 'ミスと漏れ',
+    body: '入力漏れ、通知漏れ、請求漏れ。小さな抜けが、大きな損失になる。',
+  },
+  {
+    num: '05',
+    title: '何から？',
+    body: 'DXに興味はある。でも、どこから手をつければいいかわからない。',
+  },
 ]
 
 export function ProblemSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const stageRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const pinRef = useRef<HTMLDivElement>(null)
+  const slidesRef = useRef<HTMLDivElement>(null)
+  const [activeSlide, setActiveSlide] = useState(0)
   const reduced = useReducedMotion()
   const mobile = useIsMobile()
 
   useEffect(() => {
-    if (reduced || mobile || !sectionRef.current || !stageRef.current) return
+    if (reduced || mobile || !sectionRef.current || !pinRef.current || !slidesRef.current) return
 
     registerGsap()
-    const cards = stageRef.current.querySelectorAll('[data-problem-card]')
+    const panels = slidesRef.current.querySelectorAll('[data-slide]')
 
     const ctx = gsap.context(() => {
-      gsap.set(cards, { opacity: 0.25, filter: 'blur(4px)' })
-      cards.forEach((card, i) => {
-        const s = problems[i]?.scatter
-        if (!s) return
-        gsap.set(card, { x: s.x, y: s.y, rotation: s.r, zIndex: s.z })
-      })
+      gsap.set(panels, { opacity: 0, y: 40, scale: 0.98 })
+      gsap.set(panels[0], { opacity: 1, y: 0, scale: 1 })
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=180%',
+          end: `+=${slides.length * 80}%`,
           scrub: 1,
-          pin: stageRef.current,
+          pin: pinRef.current,
+          onUpdate: (self) => {
+            const idx = Math.min(
+              slides.length - 1,
+              Math.floor(self.progress * slides.length),
+            )
+            setActiveSlide(idx)
+          },
         },
       })
 
-      cards.forEach((card, i) => {
-        const start = i * 0.15
+      panels.forEach((panel, i) => {
+        if (i === 0) return
         tl.to(
-          card,
-          {
-            x: 0,
-            y: (i - 2) * 20,
-            rotation: 0,
-            opacity: i === 2 ? 1 : 0.35,
-            scale: i === 2 ? 1 : 0.92,
-            filter: i === 2 ? 'blur(0px)' : 'blur(2px)',
-            zIndex: i === 2 ? 20 : 5,
-            duration: 0.2,
-          },
-          start,
-        )
+          panels[i - 1],
+          { opacity: 0, y: -30, scale: 0.96, duration: 0.25 },
+          i * 0.2,
+        ).to(panel, { opacity: 1, y: 0, scale: 1, duration: 0.25 }, i * 0.2 + 0.05)
       })
     }, sectionRef)
 
     return () => ctx.revert()
   }, [reduced, mobile])
 
-  return (
-    <ChapterShell
-      id={SECTION_IDS.problems}
-      chapter="Pain"
-      chapterNum="02"
-      theme="dark"
-      minHeight="min-h-[200vh]"
-      className="!pt-0"
-    >
-      <GridBackground />
-      <NoiseBackground />
-      <div className="absolute inset-0 opacity-30">
-        <ChaosMesh className="w-full h-full" />
-      </div>
+  if (mobile) {
+    return (
+      <section id={SECTION_IDS.problems} className="scene-white section-pad py-24 relative overflow-hidden">
+        <AtmosphereBackground variant="mist" />
+        <div className="relative z-10 container-editorial space-y-16">
+          <h2 className="text-editorial text-3xl">その業務、まだ人の頑張りだけ？</h2>
+          {slides.map((s) => (
+            <div key={s.num} className="glass-panel">
+              <p className="text-cyan-600 text-xs tracking-widest mb-2">{s.num}</p>
+              <h3 className="text-editorial text-2xl">{s.title}</h3>
+              <p className="mt-3 text-sm text-navy-800/60 leading-relaxed font-light">{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
-      <div ref={sectionRef} className="relative z-10 pt-20">
-        <div className="container-narrow text-center mb-8 px-5">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight max-w-3xl mx-auto">
-            その業務、まだ
-            <br />
-            <span className="text-shine">人の頑張りだけ</span>で回していませんか？
-          </h2>
+  return (
+    <section
+      ref={sectionRef}
+      id={SECTION_IDS.problems}
+      className="relative"
+      style={{ height: `${100 + slides.length * 80}vh` }}
+    >
+      <div ref={pinRef} className="relative h-[100svh] overflow-hidden scene-white">
+        <AtmosphereBackground variant="mist" />
+        <ProblemChaosLayer activeIndex={activeSlide} />
+
+        <div className="absolute top-6 right-5 sm:right-10 z-30">
+          <span className="pill-tag">PAIN · 01</span>
+        </div>
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,500px)] text-center z-10 pointer-events-none opacity-[0.06]">
+          <p className="text-editorial text-[12vw] sm:text-8xl leading-none">CHAOS</p>
         </div>
 
         <div
-          ref={stageRef}
-          className={`relative flex items-center justify-center perspective-1200 ${
-            mobile ? 'min-h-0 py-12' : 'h-[100svh]'
-          }`}
+          ref={slidesRef}
+          className="relative z-20 h-full flex items-center justify-center section-pad"
         >
-          <div
-            className={`w-full max-w-lg mx-auto px-5 ${
-              mobile ? 'grid gap-4' : 'relative h-[420px]'
-            }`}
-          >
-            {problems.map((p) => (
-              <div
-                key={p.title}
-                data-problem-card
-                className={`w-full glass-neon rounded-2xl p-6 border border-cyan-400/20 will-change-transform ${
-                  mobile ? 'relative' : 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100%,340px)]'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center shrink-0">
-                    <p.icon className="text-cyan-400" size={22} />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{p.title}</h3>
-                    <p className="text-sm text-slate-400 mt-1 leading-relaxed">{p.desc}</p>
-                  </div>
-                </div>
+          {slides.map((s) => (
+            <div
+              key={s.num}
+              data-slide
+              className="absolute inset-0 flex items-center justify-center section-pad"
+            >
+              <div className="container-editorial text-center max-w-2xl">
+                <p className="text-xs tracking-[0.5em] text-cyan-600 mb-8">{s.num}</p>
+                <h2 className="text-editorial text-4xl sm:text-6xl lg:text-7xl leading-[1.1]">
+                  {s.title}
+                </h2>
+                <p className="mt-10 text-base sm:text-lg text-navy-800/55 leading-relaxed font-light max-w-md mx-auto">
+                  {s.body}
+                </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+
+        <p className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-[10px] tracking-[0.3em] text-navy-800/35 uppercase">
+          その業務、まだ人の頑張りだけで回していませんか？
+        </p>
       </div>
-    </ChapterShell>
+    </section>
   )
 }

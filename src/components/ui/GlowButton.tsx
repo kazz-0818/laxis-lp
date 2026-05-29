@@ -1,6 +1,6 @@
 import { cn } from '../../lib/utils'
 
-type Variant = 'primary' | 'secondary' | 'outline'
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost'
 
 interface GlowButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   variant?: Variant
@@ -10,11 +10,13 @@ interface GlowButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
 
 const styles: Record<Variant, string> = {
   primary:
-    'bg-linear-to-r from-mint-500 to-cyan-500 text-navy-950 font-bold shadow-lg shadow-cyan-500/30 hover:shadow-cyan-400/50 hover:scale-[1.03] active:scale-[0.98]',
+    'bg-navy-900 text-white font-semibold shadow-[0_8px_24px_-6px_rgba(15,39,68,0.35)] hover:bg-navy-800 hover:scale-[1.02] active:scale-[0.98]',
   secondary:
-    'glass text-white border-white/20 hover:border-mint-400/50 hover:bg-white/10',
+    'bg-white text-navy-900 border border-slate-200 shadow-sm hover:border-cyan-400/40 hover:shadow-md',
   outline:
-    'border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/10 hover:border-mint-400/60',
+    'border border-cyan-500/50 text-cyan-700 bg-white/80 hover:bg-cyan-50 hover:border-mint-500/60',
+  ghost:
+    'border border-white/30 text-white hover:bg-white/10',
 }
 
 const sizes = {

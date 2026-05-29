@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { SectionTitle } from '../ui/SectionTitle'
+import { CinematicScene } from '../ui/CinematicScene'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
 import { SECTION_IDS } from '../../lib/constants'
 import { cn } from '../../lib/utils'
 
@@ -17,28 +18,41 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section id={SECTION_IDS.faq} className="section-pad bg-slate-50">
-      <div className="container-narrow max-w-3xl">
-        <SectionTitle label="FAQ" title="よくあるご質問" />
-        <div className="space-y-3">
-          {faqs.map((faq, i) => (
-            <div key={faq.q} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-              <button
-                type="button"
-                className="w-full flex justify-between gap-4 p-5 text-left font-semibold text-navy-900"
-                onClick={() => setOpen(open === i ? null : i)}
-                aria-expanded={open === i}
-              >
-                {faq.q}
-                <ChevronDown className={cn('shrink-0 text-cyan-600 transition-transform', open === i && 'rotate-180')} />
-              </button>
-              {open === i && (
-                <p className="px-5 pb-5 text-sm text-slate-600 leading-relaxed">{faq.a}</p>
-              )}
-            </div>
-          ))}
-        </div>
+    <CinematicScene
+      id={SECTION_IDS.faq}
+      theme="white"
+      tag="FAQ"
+      background={<AtmosphereBackground variant="mist" />}
+      align="top"
+      minHeight="min-h-[100svh]"
+    >
+      <h2 className="text-editorial text-3xl sm:text-4xl text-center mt-8 mb-12">
+        よくあるご質問
+      </h2>
+
+      <div className="max-w-2xl mx-auto space-y-2 pb-12">
+        {faqs.map((faq, i) => (
+          <div key={faq.q} className="border-b border-slate-200 overflow-hidden">
+            <button
+              type="button"
+              className="w-full flex justify-between gap-4 py-5 text-left font-serif text-base sm:text-lg text-navy-900"
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
+            >
+              {faq.q}
+              <ChevronDown
+                className={cn(
+                  'shrink-0 text-cyan-600/60 transition-transform mt-1',
+                  open === i && 'rotate-180',
+                )}
+              />
+            </button>
+            {open === i && (
+              <p className="pb-5 text-sm text-navy-800/65 leading-relaxed font-light">{faq.a}</p>
+            )}
+          </div>
+        ))}
       </div>
-    </section>
+    </CinematicScene>
   )
 }

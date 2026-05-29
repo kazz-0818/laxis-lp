@@ -2,91 +2,75 @@ import { useEffect, useRef } from 'react'
 import { ArrowRight, FileText } from 'lucide-react'
 import { gsap, registerGsap } from '../../lib/gsap'
 import { GlowButton } from '../ui/GlowButton'
-import { GridBackground } from '../ui/GridBackground'
-import { NoiseBackground } from '../ui/NoiseBackground'
+import { AtmosphereBackground } from '../scenes/AtmosphereBackground'
 import { CTA, SECTION_IDS } from '../../lib/constants'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 export function CTASection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
-  const linesRef = useRef<SVGSVGElement>(null)
   const reduced = useReducedMotion()
 
   useEffect(() => {
-    if (reduced || !sectionRef.current) return
+    if (reduced || !ref.current) return
     registerGsap()
     const ctx = gsap.context(() => {
-      if (glowRef.current) {
-        gsap.fromTo(
-          glowRef.current,
-          { scale: 0.5, opacity: 0.2 },
-          {
-            scale: 1.3,
-            opacity: 1,
-            scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', end: 'center center', scrub: 1 },
-          },
-        )
-      }
-      if (linesRef.current) {
-        const paths = linesRef.current.querySelectorAll('line')
-        gsap.fromTo(
-          paths,
-          { scaleX: 0, opacity: 0 },
-          {
-            scaleX: 1,
-            opacity: 0.6,
-            stagger: 0.08,
-            scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' },
-          },
-        )
-      }
-    }, sectionRef)
+      gsap.fromTo(
+        glowRef.current,
+        { scale: 0.6, opacity: 0.2 },
+        {
+          scale: 1.2,
+          opacity: 1,
+          scrollTrigger: { trigger: ref.current, start: 'top 80%', scrub: 1 },
+        },
+      )
+    }, ref)
     return () => ctx.revert()
   }, [reduced])
 
   return (
     <section
+      ref={ref}
       id={SECTION_IDS.contact}
-      className="relative min-h-[85vh] flex items-center overflow-hidden bg-navy-950 text-white"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden scene-dark"
     >
-      <GridBackground />
-      <NoiseBackground />
-      <div ref={glowRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,800px)] h-[450px] bg-linear-to-r from-mint-500/15 via-cyan-500/25 to-mint-500/15 rounded-full blur-[90px] pointer-events-none" />
+      <AtmosphereBackground variant="dark" />
+      <div
+        ref={glowRef}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,700px)] aspect-square rounded-full bg-cyan-500/10 blur-[100px] pointer-events-none"
+      />
+      <div className="absolute inset-0 vignette pointer-events-none z-[1]" />
+      <div className="absolute top-6 right-5 sm:right-10 z-30">
+        <span className="pill-tag-invert">ACTION · 08</span>
+      </div>
 
-      <svg ref={linesRef} className="absolute inset-0 w-full h-full opacity-40 pointer-events-none" aria-hidden>
-        {[20, 35, 50, 65, 80].map((y) => (
-          <line key={y} x1="10%" y1={`${y}%`} x2="90%" y2={`${y}%`} stroke="#2dd4bf" strokeWidth="1" style={{ transformOrigin: 'center' }} />
-        ))}
-      </svg>
-
-      <div ref={sectionRef} className="relative z-10 section-pad w-full text-center">
-        <p className="text-[10px] font-bold tracking-[0.35em] text-mint-400 mb-4">08 — ACTION</p>
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-tight max-w-3xl mx-auto">
-          まずは今の業務の
+      <div className="relative z-10 section-pad text-center max-w-2xl mx-auto">
+        <h2 className="text-editorial-invert text-3xl sm:text-5xl lg:text-6xl leading-[1.12]">
+          まずは、
           <br />
-          <span className="text-shine">お悩みをお聞かせください。</span>
+          今の業務のお悩みを
+          <br />
+          お聞かせください。
         </h2>
-        <p className="mt-6 text-slate-300 max-w-xl mx-auto leading-relaxed text-sm sm:text-base">
-          「何から手をつければいいかわからない」
-          <br />
-          「今のやり方に限界を感じている」
-          <br />
-          そんな状態からで構いません。LAXISが、業務をゼロから整えます。
+        <p className="mt-8 text-sm sm:text-base text-slate-300/80 leading-relaxed font-light">
+          「何から手をつければいいかわからない」—— そんな状態からで構いません。
+          LAXISが、業務をゼロから整えます。
         </p>
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <GlowButton href={CTA.consult} variant="primary" size="lg" className="w-full sm:w-auto">
+        <div className="mt-12 flex flex-col sm:flex-row gap-3 justify-center">
+          <GlowButton href={CTA.consult} variant="primary" size="lg" className="!bg-white !text-navy-900 hover:!bg-slate-50">
             無料相談する
             <ArrowRight size={18} />
           </GlowButton>
-          <GlowButton href={CTA.materials} variant="secondary" size="lg" className="w-full sm:w-auto">
+          <GlowButton href={CTA.materials} variant="ghost" size="lg">
             <FileText size={18} />
             資料を見たい
           </GlowButton>
         </div>
-        <p className="mt-8 text-xs text-slate-500">
-          <a href={CTA.mailto} className="text-mint-400 hover:underline">メール</a>
-          でも受付（LINE・フォームは今後追加）
+        <p className="mt-10 text-xs text-slate-400">
+          <a href={CTA.mailto} className="hover:text-mint-400 underline underline-offset-4">
+            メール
+          </a>
+          でも受付
         </p>
       </div>
     </section>

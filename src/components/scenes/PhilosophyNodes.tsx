@@ -46,7 +46,7 @@ export function PhilosophyNodes() {
           scrub: 1,
         },
       })
-        .to(lineEls, { opacity: 0.6, stagger: 0.05, duration: 0.3 }, 0)
+        .to(lineEls, { opacity: 0.7, stagger: 0.05, duration: 0.3 }, 0)
         .to(nodeEls, { opacity: 1, scale: 1, stagger: 0.08, ease: 'power2.out' }, 0.1)
     })
 
@@ -56,16 +56,11 @@ export function PhilosophyNodes() {
   const getNode = (id: string) => nodes.find((n) => n.id === id)!
 
   return (
-    <svg
-      ref={svgRef}
-      viewBox="0 0 720 400"
-      className="w-full h-auto max-h-[360px]"
-      aria-hidden
-    >
+    <svg ref={svgRef} viewBox="0 0 720 400" className="w-full h-auto max-h-[360px]" aria-hidden>
       <defs>
         <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ef4444" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0.8" />
+          <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0.9" />
         </linearGradient>
       </defs>
       {edges.map(([from, to], i) => {
@@ -85,28 +80,28 @@ export function PhilosophyNodes() {
         )
       })}
       {nodes.map((n) => (
-          <g key={n.id}>
-            <circle
-              data-node
-              cx={n.x}
-              cy={n.y}
-              r="28"
-              fill="#0f2744"
-              stroke="#2dd4bf"
-              strokeWidth="1.5"
-            />
-            <text
-              x={n.x}
-              y={n.y + 4}
-              textAnchor="middle"
-              fill="#e2e8f0"
-              fontSize="10"
-              fontWeight="600"
-            >
-              {n.label}
-            </text>
-          </g>
-        ))}
+        <g key={n.id}>
+          <circle
+            data-node
+            cx={n.x}
+            cy={n.y}
+            r="28"
+            fill="#ffffff"
+            stroke={n.id === 'g' ? '#06b6d4' : '#cbd5e1'}
+            strokeWidth={n.id === 'g' ? 2 : 1.5}
+          />
+          <text
+            x={n.x}
+            y={n.y + 4}
+            textAnchor="middle"
+            fill="#0f2744"
+            fontSize="10"
+            fontWeight="600"
+          >
+            {n.label}
+          </text>
+        </g>
+      ))}
     </svg>
   )
 }

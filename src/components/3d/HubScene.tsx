@@ -98,8 +98,8 @@ export function HubScene({ className, gatherProgress }: HubSceneProps) {
   if (reduced || mobile) {
     return (
       <div className={`flex items-center justify-center ${className ?? ''}`} aria-hidden>
-        <div className="w-32 h-32 rounded-2xl border-2 border-mint-400/50 bg-navy-800 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-          <span className="text-mint-400 font-bold text-center text-sm leading-tight">
+        <div className="w-32 h-32 rounded-2xl border-2 border-cyan-400/50 bg-white flex items-center justify-center shadow-[0_16px_48px_-12px_rgba(6,182,212,0.25)]">
+          <span className="text-cyan-700 font-bold text-center text-sm leading-tight">
             Laxis
             <br />
             Hub
