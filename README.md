@@ -1,24 +1,22 @@
 # LAXIS（ラクシス）ランディングページ
 
-株式会社NLGが提供する業務効率化サービス「LAXIS」の公式LPです。
+没入型3DスクロールLP — React / Vite / Three.js / GSAP
 
 ## 技術スタック
 
-- React 19 + Vite 8
-- TypeScript
+- React 19 + Vite 8 + TypeScript
 - Tailwind CSS v4
-- Framer Motion
-- React Three Fiber / Three.js
+- Framer Motion（補助）
+- **GSAP + ScrollTrigger**（スクロールストーリー）
+- React Three Fiber（Hero / Laxis Hub の2箇所のみ）
 - lucide-react
 
-## ローカル開発
+## 開発
 
 ```bash
 npm install
 npm run dev
 ```
-
-ブラウザで `http://localhost:5173` を開いてください。
 
 ## ビルド
 
@@ -27,69 +25,38 @@ npm run build
 npm run preview
 ```
 
-## Vercel へのデプロイ
+## 構成
 
-1. このリポジトリを GitHub に push する
-2. [Vercel](https://vercel.com) で **New Project** を作成
-3. リポジトリをインポート
-4. 設定は以下のとおり（通常は自動検出されます）
+```
+src/components/
+├── layout/       Header, Footer, Logo
+├── sections/     全14セクション
+├── 3d/           HeroScene, HubScene, FloatingObjects
+└── ui/           GlowButton, GlassCard, SectionTitle, DashboardMock
+```
+
+## スクロールストーリー
+
+1. **Chaos** — Hero（3D・ピン留めスクロール）→ 課題カードが散らばりから整列
+2. **Organize** — 失敗セクション（混沌クラスター分解）→ 解決思想（ピン留めステップ）
+3. **Hub** — Laxis Hub 3D + カード集約
+4. **Growth** — 最終CTA（光が集まる）
+
+## CTA差し替え
+
+`src/lib/constants.ts` の `CTA` を編集。
+
+## Vercelデプロイ
 
 | 項目 | 値 |
 |------|-----|
-| Framework Preset | Vite |
-| Build Command | `npm run build` |
-| Output Directory | `dist` |
-| 環境変数 | 現時点では不要 |
+| Framework | Vite |
+| Build | `npm run build` |
+| Output | `dist` |
 
-5. Deploy を実行
+## パフォーマンス
 
-## お問い合わせ導線の差し替え
-
-`src/lib/constants.ts` の `CTA` オブジェクトを編集してください。
-
-- `consult` … 無料相談ボタンのリンク（現在は `#contact`）
-- `mailto` … メールリンク
-- `materials` … 資料請求リンク
-
-将来的に LINE 公式 URL や外部フォーム URL に差し替え可能です。
-
-## プロジェクト構成
-
-```
-src/
-├── App.tsx
-├── main.tsx
-├── index.css
-├── lib/
-│   ├── constants.ts
-│   └── utils.ts
-├── hooks/
-│   └── useReducedMotion.ts
-└── components/
-    ├── Header.tsx
-    ├── Hero.tsx
-    ├── Floating3DScene.tsx
-    ├── ProblemSection.tsx
-    ├── FailureSection.tsx
-    ├── SolutionSection.tsx
-    ├── ServiceSection.tsx
-    ├── TargetSection.tsx
-    ├── LaxisHubSection.tsx
-    ├── UseCaseSection.tsx
-    ├── DashboardPreview.tsx
-    ├── ComparisonSection.tsx
-    ├── FlowSection.tsx
-    ├── PricingSection.tsx
-    ├── FAQSection.tsx
-    ├── CTASection.tsx
-    ├── Footer.tsx
-    ├── SectionTitle.tsx
-    ├── AnimatedCard.tsx
-    ├── Logo.tsx
-    └── ui/
-        └── Button.tsx
-```
-
-## ライセンス
+- スマホ: 3D Canvas無効・GSAPピン簡略化
+- `prefers-reduced-motion`: アニメーション抑制
 
 株式会社NLG

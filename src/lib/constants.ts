@@ -2,7 +2,7 @@ export const SECTION_IDS = {
   hero: 'hero',
   problems: 'problems',
   failure: 'failure',
-  solution: 'solution',
+  philosophy: 'philosophy',
   service: 'service',
   target: 'target',
   hub: 'hub',
@@ -15,9 +15,17 @@ export const SECTION_IDS = {
   contact: 'contact',
 } as const
 
-/** 将来 LINE / フォーム URL に差し替え */
 export const CTA = {
   consult: '#contact',
   mailto: 'mailto:info@example.com?subject=LAXIS%20無料相談',
   materials: '#contact',
 } as const
+
+export const STORY_PHASES = [
+  { id: 'chaos', label: 'Chaos', title: '業務が絡まっている' },
+  { id: 'organize', label: 'Organize', title: 'ムダを整理する' },
+  { id: 'systemize', label: 'Systemize', title: '仕組み化する' },
+  { id: 'automate', label: 'Automate', title: '自動化する' },
+  { id: 'hub', label: 'Hub', title: '一元化する' },
+  { id: 'growth', label: 'Growth', title: '改善し続ける' },
+] as const
