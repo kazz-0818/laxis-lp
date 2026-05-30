@@ -11,3 +11,7 @@ dist
 *.mp4
 citrus_orchard_puresky_4k.exr
 public/hdr/citrus_orchard_puresky_4k.exr
+
+.video-frames/
+lightbulb_01_4k.blend/
+
