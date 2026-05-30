@@ -38,6 +38,7 @@ body,
     rgba(5, 7, 10, 0.45) 100%
   );
   mix-blend-mode: multiply;
+  opacity: 0.85;
 }
 
 @media (max-width: 767px) {
