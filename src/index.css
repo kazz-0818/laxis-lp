@@ -1,127 +1,13 @@
-@import 'tailwindcss';
-
-@theme {
-  --color-bg-deep: #05070a;
-  --color-bg-navy: #08111f;
-  --color-bg-slate: #0b1220;
-  --color-light-warm: #fff2b8;
-  --color-light-gold: #ffe58a;
-  --color-accent-cyan: #2dd4bf;
-  --color-accent-sky: #38bdf8;
-  --color-accent-navy: #0f3b63;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #dde7f0;
-  --color-text-muted: #8fa3b8;
-  --font-sans: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
-}
-
-:root {
-  --bg-deep: #05070a;
-  --bg-navy: #08111f;
-  --bg-slate: #0b1220;
-  --light-warm: #fff2b8;
-  --accent-cyan: #2dd4bf;
-  --accent-sky: #38bdf8;
-}
-
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: auto;
-}
-
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background: var(--bg-deep);
-  color: var(--color-text-primary);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
+html,
+body,
 #root {
-  min-height: 100vh;
-}
-
-::selection {
-  background: rgba(45, 212, 191, 0.3);
-  color: #fff;
-}
-
-.scene-section {
-  position: relative;
-  z-index: 10;
-  min-height: 100vh;
-}
-
-.scene-pin {
-  min-height: 100vh;
-}
-
-.noise-overlay {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 5;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(45, 212, 191, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45, 212, 191, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.glow-text {
-  text-shadow: 0 0 40px rgba(255, 242, 184, 0.3);
-}
-
-.canvas-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.content-layer {
-  position: relative;
-  z-index: 10;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-@media (max-width: 767px) {
-  .canvas-layer {
-    display: none;
-  }
-  .canvas-fallback {
-    display: block;
-  }
-}
-
-@media (min-width: 768px) {
-  .canvas-fallback {
-    display: none;
-  }
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #05070a;
+  overflow: hidden;
 }
