@@ -26,8 +26,7 @@ bpy.ops.export_scene.gltf(
     export_materials="EXPORT",
     export_image_format="AUTO",
     export_jpeg_quality=95,
-    export_draco_mesh_compression_enable=True,
-    export_draco_mesh_compression_level=4,
+    export_draco_mesh_compression_enable=False,
 )
 
 size_mb = os.path.getsize(glb_path) / (1024 * 1024)
