@@ -8,3 +8,6 @@ dist
 *.local
 .DS_Store
 *.tsbuildinfo
+lightbulb_01_4k.blend/
+*.MP4
+*.mp4

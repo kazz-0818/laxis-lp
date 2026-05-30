@@ -1,95 +1,127 @@
 @import 'tailwindcss';
-@import './styles/animations.css';
 
 @theme {
-  --font-sans: 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Noto Serif JP', ui-serif, Georgia, serif;
-  --color-ink: #0a1628;
-  --color-ink-muted: #64748b;
-  --color-accent: #0891b2;
-  --color-mint: #14b8a6;
-  --color-violet: #8b5cf6;
+  --color-bg-deep: #05070a;
+  --color-bg-navy: #08111f;
+  --color-bg-slate: #0b1220;
+  --color-light-warm: #fff2b8;
+  --color-light-gold: #ffe58a;
+  --color-accent-cyan: #2dd4bf;
+  --color-accent-sky: #38bdf8;
+  --color-accent-navy: #0f3b63;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #dde7f0;
+  --color-text-muted: #8fa3b8;
+  --font-sans: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+:root {
+  --bg-deep: #05070a;
+  --bg-navy: #08111f;
+  --bg-slate: #0b1220;
+  --light-warm: #fff2b8;
+  --accent-cyan: #2dd4bf;
+  --accent-sky: #38bdf8;
+}
 
-  body {
-    @apply font-sans antialiased text-ink bg-[#f8fafc] overflow-x-hidden;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  ::selection {
-    @apply bg-cyan-200/60 text-ink;
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-deep);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(45, 212, 191, 0.3);
+  color: #fff;
+}
+
+.scene-section {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+}
+
+.scene-pin {
+  min-height: 100vh;
+}
+
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.glow-text {
+  text-shadow: 0 0 40px rgba(255, 242, 184, 0.3);
+}
+
+.canvas-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-@layer utilities {
-  .font-serif {
-    font-family: var(--font-serif);
+@media (max-width: 767px) {
+  .canvas-layer {
+    display: none;
   }
-
-  .text-display {
-    @apply font-serif font-semibold tracking-tight text-ink;
+  .canvas-fallback {
+    display: block;
   }
+}
 
-  .scene-aurora {
-    background:
-      radial-gradient(ellipse 90% 60% at 15% 10%, rgba(167, 139, 250, 0.14), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 85% 15%, rgba(34, 211, 238, 0.16), transparent 50%),
-      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(241, 245, 249, 0.9), transparent),
-      linear-gradient(168deg, #ffffff 0%, #f6f8fc 42%, #eef4fc 100%);
-  }
-
-  .scene-gradient {
-    background: linear-gradient(168deg, #ffffff 0%, #f4f6fb 48%, #eef2ff 100%);
-  }
-
-  .scene-gradient-soft {
-    background: linear-gradient(180deg, #fafbfd 0%, #f0f4ff 55%, #f8fafc 100%);
-  }
-
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(10, 22, 40, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(10, 22, 40, 0.035) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, black 15%, transparent 72%);
-  }
-
-  .glass {
-    @apply bg-white/65 backdrop-blur-xl border border-white/90;
-  }
-
-  .glass-glow {
-    @apply bg-white/72 backdrop-blur-xl border border-white/95 shadow-[0_12px_40px_-14px_rgba(10,22,40,0.12),0_0_0_1px_rgba(255,255,255,0.6)_inset];
-  }
-
-  .section-pad {
-    @apply px-5 sm:px-10 lg:px-16;
-  }
-
-  .container-narrow {
-    @apply mx-auto max-w-3xl w-full;
-  }
-
-  .container-wide {
-    @apply mx-auto max-w-6xl w-full;
-  }
-
-  .scene-message {
-    @apply font-serif font-semibold tracking-tight text-ink text-center;
-    font-size: clamp(2rem, 6vw, 3.75rem);
-    line-height: 1.12;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
+@media (min-width: 768px) {
+  .canvas-fallback {
     display: none;
   }
 }
